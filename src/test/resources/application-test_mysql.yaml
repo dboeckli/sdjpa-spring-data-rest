@@ -1,6 +1,6 @@
 spring:
   application:
-    name: sdjpa-credit-card
+    name: sdjpa-spring-data-rest
 
   docker:
     compose:
@@ -27,14 +27,14 @@ spring:
 
   flyway:
     enabled: true
-    user: paymentadmin
+    user: datarestadmin
     password: password
-    url: jdbc:mysql://localhost:3306/paymentdb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKey
+    url: jdbc:mysql://localhost:3306/datarestdb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKey
 
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/paymentdb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mysql://127.0.0.1:3306/datarestdb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: paymentuser
+    username: datarestuser
     password: password
 
 management:

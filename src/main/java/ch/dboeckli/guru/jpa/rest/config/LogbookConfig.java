@@ -1,4 +1,4 @@
-package ch.dboeckli.guru.jpa.creditcard.config;
+package ch.dboeckli.guru.jpa.rest.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

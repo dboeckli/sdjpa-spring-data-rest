@@ -33,7 +33,7 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               value: password
             - name: MYSQL_DATABASE
-              value: paymentdb
+              value: datarestdb
             - name: MYSQL_USER
               value: user
             - name: MYSQL_PASSWORD

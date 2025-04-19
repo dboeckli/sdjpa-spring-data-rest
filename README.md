@@ -1,33 +1,4 @@
-# Spring Data JPA Wordpress
-
-This repository contains source code examples to support my course Spring Data JPA and Hibernate Beginner to Guru
-
-## JPA Interceptors, Listener, Callbacks
-
-This project demonstrates the functionality of JPA/Hibernate Interceptors, Listeners, and Callbacks:
-
-1. **JPA Entity Listeners**: These allow the execution of callback methods at specific lifecycle events of an entity.
-   Example: `@EntityListeners(AuditTrailListener.class)`
-
-2. **JPA Callbacks**: Methods defined directly in the entity class that are called on certain events.
-   Examples: `@PrePersist`, `@PostLoad`, `@PreUpdate`
-
-3. **Hibernate Interceptors**: Offer more comprehensive possibilities for manipulating entities during various database operations.
-   Example: Implementation of the `Interceptor` interface
-
-4. **JPA Converters**: Allow for custom conversion between database column values and entity attribute values.
-   Example: Implementation of the `AttributeConverter` interface
-
-These mechanisms are used in the project to:
-- Automatically set timestamps for creation and updates
-- Create audit trails
-- Validate or transform data before saving
-- Execute additional logic during database operations
-
-For more information please refer to the following documents in the `doc` folder:
-
-- [ListenersAndInterceptors](doc/ListenersAndInterceptors.pdf): This document provides a comprehensive overview of database transactions.
-
+# Spring Data REST - Example Project
 
 ## Flyway
 

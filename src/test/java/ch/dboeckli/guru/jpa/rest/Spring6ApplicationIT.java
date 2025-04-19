@@ -1,4 +1,4 @@
-package ch.dboeckli.guru.jpa.creditcard;
+package ch.dboeckli.guru.jpa.rest;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
