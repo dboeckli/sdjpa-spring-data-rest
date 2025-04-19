@@ -2,7 +2,8 @@ package ch.dboeckli.guru.jpa.rest.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.util.UUID;
 
@@ -19,8 +20,8 @@ import java.util.UUID;
 public class Customer {
     @Id
     @GeneratedValue(generator = "UUID")
-    @UuidGenerator(style = UuidGenerator.Style.TIME)
-    @Column(length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
+    @Column(columnDefinition = "char(36)", updatable = false, nullable = false)
+    @JdbcTypeCode(SqlTypes.CHAR)
     private UUID id;
 
     private String name;

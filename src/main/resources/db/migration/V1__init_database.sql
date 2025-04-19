@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS customer;
 
 -- Create Beer table
 CREATE TABLE beer (
-                      id VARCHAR(36) PRIMARY KEY,
+                      id CHAR(36) PRIMARY KEY,
                       version BIGINT,
                       beer_name VARCHAR(255),
                       beer_style VARCHAR(50),
@@ -19,7 +19,7 @@ CREATE INDEX idx_beer_name ON beer (beer_name);
 
 -- Create Customer table
 CREATE TABLE customer (
-                          id VARCHAR(36) PRIMARY KEY,
+                          id CHAR(36) PRIMARY KEY,
                           name VARCHAR(255)
 );
 

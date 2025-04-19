@@ -23,10 +23,9 @@ spring:
     database: h2
     hibernate:
       ddl-auto: create-drop
-    defer-datasource-initialization: false
+    defer-datasource-initialization: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
         show_sql: true
         format_sql: true
   h2:
