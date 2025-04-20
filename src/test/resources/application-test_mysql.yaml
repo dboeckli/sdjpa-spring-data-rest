@@ -11,6 +11,10 @@ spring:
       skip:
         in-tests: false
 
+  data:
+    rest:
+      base-path: /api/v9
+
   sql:
     init:
       mode: never
