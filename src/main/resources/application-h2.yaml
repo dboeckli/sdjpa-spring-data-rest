@@ -76,7 +76,10 @@ logbook:
   predicate:
     exclude:
       - path: /actuator/health/**
-      - path: /h2-console/*
+      - path: /h2-console/**
+      - path: /swagger-ui/**
+      - path: /web/**
+      - path: /webjars/**
 
 server:
   port: 8080
