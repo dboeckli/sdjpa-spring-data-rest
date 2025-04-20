@@ -1,0 +1,7 @@
+### get all beers
+GET http://localhost:8080/api/v9/beer
+Accept: application/json
+
+### get profile
+GET http://localhost:8080/api/v9/profile/beer
+Accept: application/json

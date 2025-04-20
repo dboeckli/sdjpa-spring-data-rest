@@ -8,6 +8,10 @@ spring:
       stop:
         command: down
 
+  data:
+    rest:
+      base-path: /api/v9
+
   datasource:
     url: jdbc:h2:mem:sdjpa-spring-data-rest-test-db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     username: sa
@@ -23,10 +27,9 @@ spring:
     database: h2
     hibernate:
       ddl-auto: create-drop
-    defer-datasource-initialization: false
+    defer-datasource-initialization: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
         show_sql: true
         format_sql: true
   h2:

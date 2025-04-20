@@ -11,6 +11,10 @@ spring:
       skip:
         in-tests: false
 
+  data:
+    rest:
+      base-path: /api/v9
+
   sql:
     init:
       mode: never
@@ -29,7 +33,7 @@ spring:
     enabled: true
     user: datarestadmin
     password: password
-    url: jdbc:mysql://localhost:3306/datarestdb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKey
+    url: jdbc:mysql://localhost:3306/datarestdb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false
 
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/datarestdb?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false

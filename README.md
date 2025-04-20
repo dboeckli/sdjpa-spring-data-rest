@@ -1,5 +1,11 @@
 # Spring Data REST - Example Project
 
+## Swagger/Openapi Url
+
+http://localhost:8080/swagger-ui/index.html
+http://localhost:8080/v3/api-docs
+
+
 ## Flyway
 
 To enable Flyway in the MySQL profile, override the following properties when starting the application:
