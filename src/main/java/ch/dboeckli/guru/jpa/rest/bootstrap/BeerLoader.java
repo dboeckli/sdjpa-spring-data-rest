@@ -50,6 +50,7 @@ public class BeerLoader implements CommandLineRunner {
 
 
     private final BeerRepository beerRepository;
+    private final Random random = new Random();
 
     @Override
     public void run(String... args) {
@@ -60,8 +61,6 @@ public class BeerLoader implements CommandLineRunner {
         log.info("Loading initial data. Count is: {}", beerRepository.count() );
 
         if (beerRepository.count() == 0) {
-
-            Random random = new Random();
 
             beerRepository.save(Beer.builder()
                 .beerName("Mango Bobs")
