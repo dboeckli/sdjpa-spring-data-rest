@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${beer.id} ? 'Edit Beer' : 'Create Beer'">Beer Form</title>
+    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="mb-4" id="pageTitle" th:text="${beer.id} ? 'Edit Beer' : 'Create Beer'">Beer Form</h1>
+
+    <form th:action="${beer.id} ? @{/web/beer/edit/{id}(id=${beer.id})} : @{/web/beer/save-new-beer/}" th:object="${beer}" method="post">
+        <input type="hidden" th:field="*{id}" />
+        <input type="hidden" th:field="*{version}" />
+
+        <div class="mb-3">
+            <label for="beerName" class="form-label">Name:</label>
+            <input type="text" class="form-control" id="beerName" th:field="*{beerName}" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="beerStyle" class="form-label">Style:</label>
+            <select class="form-select" id="beerStyle" th:field="*{beerStyle}" required>
+                <option th:each="style : ${T(ch.dboeckli.guru.jpa.rest.domain.BeerStyleEnum).values()}"
+                        th:value="${style}" th:text="${style}">
+                </option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="upc" class="form-label">UPC:</label>
+            <input type="text" class="form-control" id="upc" th:field="*{upc}" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="quantityOnHand" class="form-label">Quantity on Hand:</label>
+            <input type="number" class="form-control" id="quantityOnHand" th:field="*{quantityOnHand}" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="price" class="form-label">Price:</label>
+            <input type="number" class="form-control" id="price" th:field="*{price}" step="0.01" required />
+        </div>
+
+        <input type="hidden" th:field="*{createdDate}" />
+        <input type="hidden" th:field="*{lastModifiedDate}" />
+
+        <button type="submit" class="btn btn-primary" th:text="${beer.id} ? 'Update Beer' : 'Create Beer'">Save Beer</button>
+    </form>
+
+    <a th:href="@{/web/beers}" class="btn btn-secondary mt-3">Back to Beer List</a>
+</div>
+</body>
+</html>
