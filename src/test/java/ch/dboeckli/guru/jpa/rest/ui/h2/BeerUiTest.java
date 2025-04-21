@@ -216,9 +216,16 @@ class BeerUiTest {
 
         // Find and click the edit button for the first beer
         WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(30));
-        WebElement editButton = wait.until(ExpectedConditions.elementToBeClickable(
+
+        // First, wait for the presence of the element
+        WebElement editButton = wait.until(ExpectedConditions.presenceOfElementLocated(
             By.cssSelector("a[id^='editBeer-']")
         ));
+        // Scroll the element into view
+        ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", editButton);
+        // Now wait for it to be clickable
+        editButton = wait.until(ExpectedConditions.elementToBeClickable(editButton));
+
         // Extract the beer ID from the edit button's ID
         String editButtonId = editButton.getAttribute("id");
         String beerId = StringUtils.substringAfter(editButtonId, "editBeer-");
