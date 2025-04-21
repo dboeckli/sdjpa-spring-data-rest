@@ -224,7 +224,7 @@ class BeerUiTest {
         ));
         // Scroll the element into view
         Actions actions = new Actions(webDriver);
-        actions.moveToElement(editButton).click().perform();
+        //actions.moveToElement(editButton).click().perform();
         //JavascriptExecutor jse = (JavascriptExecutor)webDriver;
         //jse.executeScript("arguments[0].scrollIntoView()", editButton);
 
