@@ -222,7 +222,9 @@ class BeerUiTest {
             By.cssSelector("a[id^='editBeer-']")
         ));
         // Scroll the element into view
-        ((JavascriptExecutor) webDriver).executeScript("arguments[0].scrollIntoView(true);", editButton);
+        JavascriptExecutor jse = (JavascriptExecutor)webDriver;
+        jse.executeScript("arguments[0].scrollIntoView()", editButton);
+
         // Now wait for it to be clickable
         editButton = wait.until(ExpectedConditions.elementToBeClickable(editButton));
 
