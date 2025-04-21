@@ -229,8 +229,9 @@ class BeerUiTest {
         // Extract the beer ID from the edit button's ID
         String editButtonId = editButton.getAttribute("id");
         String beerId = StringUtils.substringAfter(editButtonId, "editBeer-");
-
+        log.info("Clicking edit button for beer ID: {}", beerId);
         editButton.click();
+        log.info("Clicking edit button for beer ID done: {}", beerId);
 
         // Wait for the edit page to load
         wait.until(ExpectedConditions.urlContains(BEER_PAGE + "/edit/"));
