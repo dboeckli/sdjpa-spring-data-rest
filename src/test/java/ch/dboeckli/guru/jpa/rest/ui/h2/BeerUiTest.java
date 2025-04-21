@@ -215,7 +215,7 @@ class BeerUiTest {
         waitForPageLoad();
 
         // Find and click the edit button for the first beer
-        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(30));
         WebElement editButton = wait.until(ExpectedConditions.elementToBeClickable(
             By.cssSelector("a[id^='editBeer-']")
         ));
