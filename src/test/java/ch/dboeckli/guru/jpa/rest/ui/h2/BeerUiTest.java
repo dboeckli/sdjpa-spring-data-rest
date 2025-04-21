@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -222,8 +223,10 @@ class BeerUiTest {
             By.cssSelector("a[id^='editBeer-']")
         ));
         // Scroll the element into view
-        JavascriptExecutor jse = (JavascriptExecutor)webDriver;
-        jse.executeScript("arguments[0].scrollIntoView()", editButton);
+        Actions actions = new Actions(webDriver);
+        actions.moveToElement(editButton).click().perform();
+        //JavascriptExecutor jse = (JavascriptExecutor)webDriver;
+        //jse.executeScript("arguments[0].scrollIntoView()", editButton);
 
         // Now wait for it to be clickable
         editButton = wait.until(ExpectedConditions.elementToBeClickable(editButton));
@@ -232,7 +235,8 @@ class BeerUiTest {
         String editButtonId = editButton.getAttribute("id");
         String beerId = StringUtils.substringAfter(editButtonId, "editBeer-");
         log.info("Clicking edit button for beer ID: {}", beerId);
-        editButton.click();
+        //editButton.click();
+        actions.moveToElement(editButton).click().perform();
         log.info("Clicking edit button for beer ID done: {}", beerId);
 
         // Wait for the edit page to load
