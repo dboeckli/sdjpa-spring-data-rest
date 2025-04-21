@@ -1,4 +1,4 @@
-package ch.dboeckli.guru.jpa.rest.data.h2;
+package ch.dboeckli.guru.jpa.rest.controller.mysql;
 
 import ch.dboeckli.guru.jpa.rest.domain.Beer;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -9,21 +9,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsStringIgnoringCase;
+import static org.hamcrest.Matchers.everyItem;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test_mysql")
 @Slf4j
-class BeerControllerTest {
+class BeerControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
@@ -82,5 +85,55 @@ class BeerControllerTest {
             .andExpect(jsonPath("$._links.self.href", is(firstBeerSelfLink)));
 
         log.info("Successfully fetched and validated first beer details");
+    }
+
+    @Test
+    void testFindAllByBeerName() throws Exception {
+        mockMvc.perform(get("/api/v9/beer/search/findAllByBeerName")
+                .param("beerName", "IPA")
+                .param("page", "0")
+                .param("size", "10")
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$._embedded.beer").exists())
+            .andExpect(jsonPath("$._embedded.beer[*].beerName", everyItem(containsStringIgnoringCase("IPA"))));
+    }
+
+    @Test
+    void testFindAllByBeerStyle() throws Exception {
+        mockMvc.perform(get("/api/v9/beer/search/findAllByBeerStyle")
+                .param("beerStyle", "IPA")
+                .param("page", "0")
+                .param("size", "10")
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$._embedded.beer").exists())
+            .andExpect(jsonPath("$._embedded.beer[*].beerStyle", everyItem(is("IPA"))));
+    }
+
+    @Test
+    void testFindAllByBeerNameAndBeerStyle() throws Exception {
+        mockMvc.perform(get("/api/v9/beer/search/findAllByBeerNameAndBeerStyle")
+                .param("beerName", "IPA")
+                .param("beerStyle", "IPA")
+                .param("page", "0")
+                .param("size", "10")
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$._embedded.beer").exists())
+            .andExpect(jsonPath("$._embedded.beer[*].beerName", everyItem(containsStringIgnoringCase("IPA"))))
+            .andExpect(jsonPath("$._embedded.beer[*].beerStyle", everyItem(is("IPA"))));
+    }
+
+    @Test
+    void testFindByUpc() throws Exception {
+        String testUpc = "0631234200036";
+        mockMvc.perform(get("/api/v9/beer/search/findByUpc")
+                .param("upc", testUpc)
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.beerName").exists())
+            .andExpect(jsonPath("$.beerStyle").exists())
+            .andExpect(jsonPath("$.upc", is(testUpc)));
     }
 }
