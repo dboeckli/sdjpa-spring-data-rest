@@ -15,15 +15,53 @@
 
     <a href="/web/beer/new" class="btn btn-primary mb-3" id="createNewBeer">Create New Beer</a>
 
+    <div class="mb-4">
+        <h2>Search Beers</h2>
+        <form th:action="@{/web/beers/search}" method="get" class="row g-3">
+            <div class="col-md-4">
+                <label for="beerName" class="form-label">Beer Name:</label>
+                <input type="text" class="form-control" id="beerName" name="beerName" th:value="${beerName}">
+            </div>
+            <div class="col-md-4">
+                <label for="beerStyle" class="form-label">Beer Style:</label>
+                <select class="form-select" id="beerStyle" name="beerStyle">
+                    <option value="">Select Style</option>
+                    <option th:each="style : ${T(ch.dboeckli.guru.jpa.rest.domain.BeerStyleEnum).values()}"
+                            th:value="${style}"
+                            th:text="${style}"
+                            th:selected="${style == beerStyle}">
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-4 align-self-end">
+                <button type="submit" class="btn btn-primary">Search</button>
+                <a th:href="@{/web/beers}" class="btn btn-secondary">Clear</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="mb-3">
+        <h3>Search by UPC</h3>
+        <form th:action="@{/web/beer/search/upc}" method="get" class="row g-3">
+            <div class="col-md-4">
+                <label for="upc" class="form-label">UPC:</label>
+                <input type="text" class="form-control" id="upc" name="upc">
+            </div>
+            <div class="col-md-4 align-self-end">
+                <button type="submit" class="btn btn-primary">Search by UPC</button>
+            </div>
+        </form>
+    </div>
+
     <nav aria-label="Page navigation" th:if="${totalPages > 1}">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${currentPage == 0} ? disabled">
-                <a class="page-link" th:href="@{/web/beers(page=${currentPage - 1},size=${size})}" tabindex="-1">Previous</a>
+                <a class="page-link" th:href="@{/web/beers/search(page=${currentPage - 1},size=${size},beerName=${beerName},beerStyle=${beerStyle})}" tabindex="-1">Previous</a>
             </li>
 
             <!-- First Page -->
             <li class="page-item" th:classappend="${currentPage == 0} ? active">
-                <a class="page-link" th:href="@{/web/beers(page=0,size=${size})}">First</a>
+                <a class="page-link" th:href="@{/web/beers/search(page=0,size=${size},beerName=${beerName},beerStyle=${beerStyle})}">First</a>
             </li>
 
             <li class="page-item disabled" th:if="${startPage > 1}">
@@ -32,7 +70,7 @@
 
             <li class="page-item" th:each="pageNumber : ${#numbers.sequence(startPage, endPage)}"
                 th:classappend="${pageNumber == currentPage} ? active">
-                <a class="page-link" th:href="@{/web/beers(page=${pageNumber},size=${size})}" th:text="${pageNumber + 1}"></a>
+                <a class="page-link" th:href="@{/web/beers/search(page=${pageNumber},size=${size},beerName=${beerName},beerStyle=${beerStyle})}" th:text="${pageNumber + 1}"></a>
             </li>
 
             <li class="page-item disabled" th:if="${endPage < totalPages - 2}">
@@ -41,11 +79,11 @@
 
             <!-- Last Page -->
             <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? active" th:if="${totalPages > 1}">
-                <a class="page-link" th:href="@{/web/beers(page=${totalPages - 1},size=${size})}">Last</a>
+                <a class="page-link" th:href="@{/web/beers/search(page=${totalPages - 1},size=${size},beerName=${beerName},beerStyle=${beerStyle})}">Last</a>
             </li>
 
             <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? disabled">
-                <a class="page-link" th:href="@{/web/beers(page=${currentPage + 1},size=${size})}">Next</a>
+                <a class="page-link" th:href="@{/web/beers/search(page=${currentPage + 1},size=${size},beerName=${beerName},beerStyle=${beerStyle})}">Next</a>
             </li>
         </ul>
     </nav>
