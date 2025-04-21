@@ -1,5 +1,16 @@
 # Spring Data REST - Example Project
 
+This project demonstrates the implementation of a Spring Data REST application for managing beer data. It showcases the power and simplicity of Spring Data REST in creating RESTful APIs with minimal boilerplate code. The application provides CRUD operations for beer entities, supports pagination, sorting, and custom query methods. It includes both a RESTful API and a web interface for user interaction.
+
+Key features:
+- RESTful API for beer data management
+- Custom query methods for searching beers by name, style, and UPC
+- Web interface for viewing and navigating beer data
+- Integration with MySQL database (with H2 option for development)
+- Flyway for database migration management
+- Docker and Kubernetes support for easy deployment
+- Swagger/OpenAPI documentation
+
 ## Swagger/Openapi Url
 
 http://localhost:8080/swagger-ui/index.html

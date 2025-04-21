@@ -5,3 +5,29 @@ Accept: application/json
 ### get profile
 GET http://localhost:8080/api/v9/profile/beer
 Accept: application/json
+
+Certainly! I'll add four new HTTP requests to test the repository methods we discussed earlier. Here's an updated version of your beers.http file with the additional requests:
+beers.http
+### get all beers
+GET http://localhost:8080/api/v9/beer
+Accept: application/json
+
+### get profile
+GET http://localhost:8080/api/v9/profile/beer
+Accept: application/json
+
+### find all beers by name (IPA)
+GET http://localhost:8080/api/v9/beer/search/findAllByBeerName?beerName=IPA&page=0&size=10
+Accept: application/json
+
+### find all beers by style (IPA)
+GET http://localhost:8080/api/v9/beer/search/findAllByBeerStyle?beerStyle=IPA&page=0&size=10
+Accept: application/json
+
+### find all beers by name and style (IPA)
+GET http://localhost:8080/api/v9/beer/search/findAllByBeerNameAndBeerStyle?beerName=IPA&beerStyle=IPA&page=0&size=10
+Accept: application/json
+
+### find beer by UPC
+GET http://localhost:8080/api/v9/beer/search/findByUpc?upc=0631234200036
+Accept: application/json
