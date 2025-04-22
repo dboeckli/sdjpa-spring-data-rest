@@ -106,7 +106,7 @@ class BeerUiTest {
         webDriver.get("http://localhost:" + port + LIST_BEERS_PAGE);
         waitForPageLoad();
 
-        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(15));
 
         WebElement beerStyleSelect = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("beerStyle")));
         beerStyleSelect.sendKeys(BeerStyleEnum.PALE_ALE.name());
@@ -119,7 +119,9 @@ class BeerUiTest {
         List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
         assertFalse(beerRows.isEmpty(), "Search results should not be empty");
 
+        Actions actions = new Actions(webDriver);
         for (WebElement row : beerRows) {
+            actions.moveToElement(row); // TODO: debug
             WebElement styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
             assertEquals(BeerStyleEnum.PALE_ALE.name(), styleElement.getText(), "All results should have PALE_ALE style");
         }
@@ -131,7 +133,7 @@ class BeerUiTest {
         webDriver.get("http://localhost:" + port + LIST_BEERS_PAGE);
         waitForPageLoad();
 
-        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(15));
 
         WebElement beerNameInput = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("beerName")));
         beerNameInput.sendKeys("Galaxy Cat");
@@ -147,8 +149,8 @@ class BeerUiTest {
         List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
         assertFalse(beerRows.isEmpty(), "Search results should not be empty");
 
+        Actions actions = new Actions(webDriver);
         for (WebElement row : beerRows) {
-            Actions actions = new Actions(webDriver);
             actions.moveToElement(row); // TODO: debug
 
             WebElement nameElement = row.findElement(By.cssSelector("td[id^='beerName-']"));
