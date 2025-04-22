@@ -328,7 +328,7 @@ class BeerUiIT {
 
         // Navigate to the next page
         WebElement nextPageButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(@class, 'page-link') and text()='Next']")));
-        nextPageButton.click();
+        actions.moveToElement(nextPageButton).click().perform();
         waitForPageLoad();
 
         // Verify that the new beer is in the list
