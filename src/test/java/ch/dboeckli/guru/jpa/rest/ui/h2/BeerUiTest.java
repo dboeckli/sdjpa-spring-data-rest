@@ -148,6 +148,9 @@ class BeerUiTest {
         assertFalse(beerRows.isEmpty(), "Search results should not be empty");
 
         for (WebElement row : beerRows) {
+            Actions actions = new Actions(webDriver);
+            actions.moveToElement(row); // TODO: debug
+
             WebElement nameElement = row.findElement(By.cssSelector("td[id^='beerName-']"));
             WebElement styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
             assertTrue(nameElement.getText().toLowerCase().contains("galaxy cat"), "All results should contain 'Galaxy Cat' in the name");
