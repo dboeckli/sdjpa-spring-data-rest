@@ -82,6 +82,7 @@ logbook:
       - path: /swagger-ui/**
       - path: /web/**
       - path: /webjars/**
+      - path: /favicon.ico
 
 server:
   port: 8080

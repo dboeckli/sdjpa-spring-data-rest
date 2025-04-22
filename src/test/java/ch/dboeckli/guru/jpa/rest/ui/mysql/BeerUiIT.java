@@ -1,14 +1,13 @@
 package ch.dboeckli.guru.jpa.rest.ui.mysql;
 
+import ch.dboeckli.guru.jpa.rest.domain.BeerStyleEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -74,21 +73,184 @@ class BeerUiIT {
     }
 
     @Test
+    @Order(3)
+    void testSearchByBeerName() {
+        webDriver.get("http://localhost:" + port + LIST_BEERS_PAGE);
+        waitForPageLoad();
+
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
+
+        WebElement beerNameInput = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("beerName")));
+        beerNameInput.sendKeys("Galaxy Cat");
+
+        WebElement searchButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
+        searchButton.click();
+
+        waitForPageLoad();
+        try {
+            List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
+            assertFalse(beerRows.isEmpty(), "Search results should not be empty");
+            for (WebElement row : beerRows) {
+                WebElement nameElement = row.findElement(By.cssSelector("td[id^='beerName-']"));
+                assertTrue(nameElement.getText().toLowerCase().contains("galaxy cat"), "All results should contain 'Galaxy Cat' in the name");
+            }
+        } catch (StaleElementReferenceException e) {
+            List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
+            assertFalse(beerRows.isEmpty(), "Search results should not be empty");
+            for (WebElement row : beerRows) {
+                WebElement nameElement = row.findElement(By.cssSelector("td[id^='beerName-']"));
+                assertTrue(nameElement.getText().toLowerCase().contains("galaxy cat"), "All results should contain 'Galaxy Cat' in the name");
+            }
+        }
+    }
+
+    @Test
+    @Order(4)
+    void testSearchByBeerStyle() {
+        webDriver.get("http://localhost:" + port + LIST_BEERS_PAGE);
+        waitForPageLoad();
+
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(15));
+
+        WebElement beerStyleSelect = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("beerStyle")));
+        beerStyleSelect.sendKeys(BeerStyleEnum.PALE_ALE.name());
+
+        WebElement searchButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
+        searchButton.click();
+
+        waitForPageLoad();
+        try {
+            List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
+            assertFalse(beerRows.isEmpty(), "Search results should not be empty");
+            for (WebElement row : beerRows) {
+                WebElement styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
+                assertEquals(BeerStyleEnum.PALE_ALE.name(), styleElement.getText(), "All results should have PALE_ALE style");
+            }
+        } catch (StaleElementReferenceException e) {
+            List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
+            assertFalse(beerRows.isEmpty(), "Search results should not be empty");
+            for (WebElement row : beerRows) {
+                WebElement styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
+                assertEquals(BeerStyleEnum.PALE_ALE.name(), styleElement.getText(), "All results should have PALE_ALE style");
+            }
+        }
+    }
+
+    @Test
+    @Order(5)
+    void testSearchByBeerNameAndStyle() {
+        webDriver.get("http://localhost:" + port + LIST_BEERS_PAGE);
+        waitForPageLoad();
+
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(15));
+
+        WebElement beerNameInput = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("beerName")));
+        beerNameInput.sendKeys("Galaxy Cat");
+
+        WebElement beerStyleSelect = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("beerStyle")));
+        beerStyleSelect.sendKeys(BeerStyleEnum.PALE_ALE.name());
+
+        WebElement searchButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
+        searchButton.click();
+
+        waitForPageLoad();
+        try {
+            List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
+            assertFalse(beerRows.isEmpty(), "Search results should not be empty");
+            for (WebElement row : beerRows) {
+                WebElement nameElement = row.findElement(By.cssSelector("td[id^='beerName-']"));
+                WebElement styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
+                assertTrue(nameElement.getText().toLowerCase().contains("galaxy cat"), "All results should contain 'Galaxy Cat' in the name");
+                assertEquals(BeerStyleEnum.PALE_ALE.name(), styleElement.getText(), "All results should have PALE_ALE style");
+            }
+        } catch (StaleElementReferenceException e) {
+            List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
+            assertFalse(beerRows.isEmpty(), "Search results should not be empty");
+            for (WebElement row : beerRows) {
+                WebElement nameElement = row.findElement(By.cssSelector("td[id^='beerName-']"));
+                WebElement styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
+                assertTrue(nameElement.getText().toLowerCase().contains("galaxy cat"), "All results should contain 'Galaxy Cat' in the name");
+                assertEquals(BeerStyleEnum.PALE_ALE.name(), styleElement.getText(), "All results should have PALE_ALE style");
+            }
+        }
+    }
+
+    @Test
+    @Order(6)
+    void testSearchByUpc() {
+        webDriver.get("http://localhost:" + port + LIST_BEERS_PAGE);
+        waitForPageLoad();
+
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
+
+        // Find and fill the UPC input
+        WebElement upcInput = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("upc")));
+        upcInput.clear();
+        upcInput.sendKeys("0631234200036");
+
+        // Find and click the "Search by UPC" button
+        WebElement searchByUpcButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(), 'Search by UPC')]")));
+        searchByUpcButton.click();
+
+        waitForPageLoad();
+
+        // Check if we're on the Beer Details page
+        wait.until(ExpectedConditions.titleIs("Beer Details"));
+
+        // Check the beer details
+        WebElement pageTitle = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("pageTitle")));
+        assertEquals("Beer Details", pageTitle.getText(), "The page title should be 'Beer Details'");
+
+        WebElement beerNameElement = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("beerName")));
+        assertEquals("Mango Bobs", beerNameElement.getText(), "The beer name should be 'Mango Bobs'");
+
+        WebElement beerStyleElement = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("beerStyle")));
+        assertEquals("ALE", beerStyleElement.getText(), "The beer style should be 'ALE'");
+
+        WebElement upcElement = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("beerUpc")));
+        assertEquals("0631234200036", upcElement.getText(), "The UPC should match the search input");
+
+        // Check other details
+        WebElement idElement = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("beerId")));
+        assertFalse(idElement.getText().isEmpty(), "The ID should not be empty");
+
+        WebElement priceElement = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("beerPrice")));
+        assertFalse(priceElement.getText().isEmpty(), "The Price should not be empty");
+
+        WebElement quantityElement = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("beerQuantity")));
+        assertFalse(quantityElement.getText().isEmpty(), "The Quantity On Hand should not be empty");
+
+        // Check if "Edit Beer" and "Delete Beer" buttons are present
+        assertTrue(webDriver.findElement(By.id("editBeerButton")).isDisplayed(), "Edit Beer button should be visible");
+        assertTrue(webDriver.findElement(By.id("deleteBeerButton")).isDisplayed(), "Delete Beer button should be visible");
+
+        // Check if "Back to Beer List" link is present
+        assertTrue(webDriver.findElement(By.id("backToListButton")).isDisplayed(), "Back to Beer List button should be visible");
+    }
+
+    @Test
+    @Order(97)
     void testEditBeer() {
         // Navigate to the beer list page
         webDriver.get("http://localhost:" + port + LIST_BEERS_PAGE);
         waitForPageLoad();
 
         // Find and click the edit button for the first beer
-        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
-        WebElement editButton = wait.until(ExpectedConditions.elementToBeClickable(
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(30));
+
+        // First, wait for the presence of the element
+        WebElement editButton = wait.until(ExpectedConditions.presenceOfElementLocated(
             By.cssSelector("a[id^='editBeer-']")
         ));
+        // Now wait for it to be clickable
+        editButton = wait.until(ExpectedConditions.elementToBeClickable(editButton));
+
         // Extract the beer ID from the edit button's ID
         String editButtonId = editButton.getAttribute("id");
         String beerId = StringUtils.substringAfter(editButtonId, "editBeer-");
 
-        editButton.click();
+        Actions actions = new Actions(webDriver);
+        actions.moveToElement(editButton).click().perform();
 
         // Wait for the edit page to load
         wait.until(ExpectedConditions.urlContains(BEER_PAGE + "/edit/"));
@@ -126,7 +288,7 @@ class BeerUiIT {
     }
 
     @Test
-    @Order(2)
+    @Order(98)
     void testCreateNewBeer() {
         // Navigate to the beer list page
         webDriver.get("http://localhost:" + port + LIST_BEERS_PAGE);
@@ -141,7 +303,8 @@ class BeerUiIT {
 
         // Click on the "Create New Beer" button
         WebElement newBeerButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("createNewBeer")));
-        newBeerButton.click();
+        Actions actions = new Actions(webDriver);
+        actions.moveToElement(newBeerButton).click().perform();
 
         // Wait for the new beer form to load
         wait.until(ExpectedConditions.urlContains(BEER_PAGE + "/new"));
@@ -190,7 +353,7 @@ class BeerUiIT {
 
         // Navigate to the next page
         WebElement nextPageButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(@class, 'page-link') and text()='Next']")));
-        nextPageButton.click();
+        actions.moveToElement(nextPageButton).click().perform();
         waitForPageLoad();
 
         // Verify that the new beer is in the list
