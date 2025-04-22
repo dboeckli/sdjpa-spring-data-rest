@@ -4,10 +4,7 @@ import ch.dboeckli.guru.jpa.rest.domain.BeerStyleEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
@@ -120,10 +117,19 @@ class BeerUiTest {
         assertFalse(beerRows.isEmpty(), "Search results should not be empty");
 
         Actions actions = new Actions(webDriver);
+        int rowIndex = 0;
         for (WebElement row : beerRows) {
-            actions.moveToElement(row); // TODO: debug
-            WebElement styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
+            WebElement styleElement;
+            try {
+                styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
+            } catch(StaleElementReferenceException e) {
+                beerRows = webDriver.findElements(By.cssSelector("#beerTable tbody tr"));
+                row = beerRows.get(rowIndex);
+                styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
+            }
+
             assertEquals(BeerStyleEnum.PALE_ALE.name(), styleElement.getText(), "All results should have PALE_ALE style");
+            rowIndex++;
         }
     }
 
