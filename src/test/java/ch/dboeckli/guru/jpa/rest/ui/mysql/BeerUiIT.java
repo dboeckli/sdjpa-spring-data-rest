@@ -87,7 +87,6 @@ class BeerUiIT {
         searchButton.click();
 
         waitForPageLoad();
-        waitForPageLoad();
         try {
             List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
             assertFalse(beerRows.isEmpty(), "Search results should not be empty");
