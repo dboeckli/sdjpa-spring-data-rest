@@ -4,10 +4,7 @@ import ch.dboeckli.guru.jpa.rest.domain.BeerStyleEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
@@ -106,7 +103,7 @@ class BeerUiIT {
         webDriver.get("http://localhost:" + port + LIST_BEERS_PAGE);
         waitForPageLoad();
 
-        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(15));
 
         WebElement beerStyleSelect = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("beerStyle")));
         beerStyleSelect.sendKeys(BeerStyleEnum.PALE_ALE.name());
@@ -115,13 +112,20 @@ class BeerUiIT {
         searchButton.click();
 
         waitForPageLoad();
-
-        List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
-        assertFalse(beerRows.isEmpty(), "Search results should not be empty");
-
-        for (WebElement row : beerRows) {
-            WebElement styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
-            assertEquals(BeerStyleEnum.PALE_ALE.name(), styleElement.getText(), "All results should have PALE_ALE style");
+        try {
+            List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
+            assertFalse(beerRows.isEmpty(), "Search results should not be empty");
+            for (WebElement row : beerRows) {
+                WebElement styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
+                assertEquals(BeerStyleEnum.PALE_ALE.name(), styleElement.getText(), "All results should have PALE_ALE style");
+            }
+        } catch (StaleElementReferenceException e) {
+            List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
+            assertFalse(beerRows.isEmpty(), "Search results should not be empty");
+            for (WebElement row : beerRows) {
+                WebElement styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
+                assertEquals(BeerStyleEnum.PALE_ALE.name(), styleElement.getText(), "All results should have PALE_ALE style");
+            }
         }
     }
 
@@ -131,7 +135,7 @@ class BeerUiIT {
         webDriver.get("http://localhost:" + port + LIST_BEERS_PAGE);
         waitForPageLoad();
 
-        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(15));
 
         WebElement beerNameInput = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("beerName")));
         beerNameInput.sendKeys("Galaxy Cat");
@@ -147,11 +151,22 @@ class BeerUiIT {
         List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
         assertFalse(beerRows.isEmpty(), "Search results should not be empty");
 
+        int rowIndex = 0;
         for (WebElement row : beerRows) {
-            WebElement nameElement = row.findElement(By.cssSelector("td[id^='beerName-']"));
-            WebElement styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
+            WebElement styleElement;
+            WebElement nameElement;
+            try {
+                nameElement = row.findElement(By.cssSelector("td[id^='beerName-']"));
+                styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
+            } catch(StaleElementReferenceException e) {
+                beerRows = webDriver.findElements(By.cssSelector("#beerTable tbody tr"));
+                row = beerRows.get(rowIndex);
+                nameElement = row.findElement(By.cssSelector("td[id^='beerName-']"));
+                styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
+            }
             assertTrue(nameElement.getText().toLowerCase().contains("galaxy cat"), "All results should contain 'Galaxy Cat' in the name");
             assertEquals(BeerStyleEnum.PALE_ALE.name(), styleElement.getText(), "All results should have PALE_ALE style");
+            rowIndex++;
         }
     }
 
@@ -216,10 +231,15 @@ class BeerUiIT {
         waitForPageLoad();
 
         // Find and click the edit button for the first beer
-        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
-        WebElement editButton = wait.until(ExpectedConditions.elementToBeClickable(
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(30));
+
+        // First, wait for the presence of the element
+        WebElement editButton = wait.until(ExpectedConditions.presenceOfElementLocated(
             By.cssSelector("a[id^='editBeer-']")
         ));
+        // Now wait for it to be clickable
+        editButton = wait.until(ExpectedConditions.elementToBeClickable(editButton));
+
         // Extract the beer ID from the edit button's ID
         String editButtonId = editButton.getAttribute("id");
         String beerId = StringUtils.substringAfter(editButtonId, "editBeer-");
