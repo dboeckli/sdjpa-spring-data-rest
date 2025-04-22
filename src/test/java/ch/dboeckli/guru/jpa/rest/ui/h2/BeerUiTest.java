@@ -147,26 +147,24 @@ class BeerUiTest {
         searchButton.click();
 
         waitForPageLoad();
-
-        List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
-        assertFalse(beerRows.isEmpty(), "Search results should not be empty");
-
-        int rowIndex = 0;
-        for (WebElement row : beerRows) {
-            WebElement styleElement;
-            WebElement nameElement;
-            try {
-                nameElement = row.findElement(By.cssSelector("td[id^='beerName-']"));
-                styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
-            } catch(StaleElementReferenceException e) {
-                beerRows = webDriver.findElements(By.cssSelector("#beerTable tbody tr"));
-                row = beerRows.get(rowIndex);
-                nameElement = row.findElement(By.cssSelector("td[id^='beerName-']"));
-                styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
+        try {
+            List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
+            assertFalse(beerRows.isEmpty(), "Search results should not be empty");
+            for (WebElement row : beerRows) {
+                WebElement nameElement = row.findElement(By.cssSelector("td[id^='beerName-']"));
+                WebElement styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
+                assertTrue(nameElement.getText().toLowerCase().contains("galaxy cat"), "All results should contain 'Galaxy Cat' in the name");
+                assertEquals(BeerStyleEnum.PALE_ALE.name(), styleElement.getText(), "All results should have PALE_ALE style");
             }
-            assertTrue(nameElement.getText().toLowerCase().contains("galaxy cat"), "All results should contain 'Galaxy Cat' in the name");
-            assertEquals(BeerStyleEnum.PALE_ALE.name(), styleElement.getText(), "All results should have PALE_ALE style");
-            rowIndex++;
+        } catch (StaleElementReferenceException e) {
+            List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
+            assertFalse(beerRows.isEmpty(), "Search results should not be empty");
+            for (WebElement row : beerRows) {
+                WebElement nameElement = row.findElement(By.cssSelector("td[id^='beerName-']"));
+                WebElement styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
+                assertTrue(nameElement.getText().toLowerCase().contains("galaxy cat"), "All results should contain 'Galaxy Cat' in the name");
+                assertEquals(BeerStyleEnum.PALE_ALE.name(), styleElement.getText(), "All results should have PALE_ALE style");
+            }
         }
     }
 
