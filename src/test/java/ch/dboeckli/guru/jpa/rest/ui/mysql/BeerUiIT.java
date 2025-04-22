@@ -87,13 +87,21 @@ class BeerUiIT {
         searchButton.click();
 
         waitForPageLoad();
-
-        List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
-        assertFalse(beerRows.isEmpty(), "Search results should not be empty");
-
-        for (WebElement row : beerRows) {
-            WebElement nameElement = row.findElement(By.cssSelector("td[id^='beerName-']"));
-            assertTrue(nameElement.getText().toLowerCase().contains("galaxy cat"), "All results should contain 'Galaxy Cat' in the name");
+        waitForPageLoad();
+        try {
+            List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
+            assertFalse(beerRows.isEmpty(), "Search results should not be empty");
+            for (WebElement row : beerRows) {
+                WebElement nameElement = row.findElement(By.cssSelector("td[id^='beerName-']"));
+                assertTrue(nameElement.getText().toLowerCase().contains("galaxy cat"), "All results should contain 'Galaxy Cat' in the name");
+            }
+        } catch (StaleElementReferenceException e) {
+            List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
+            assertFalse(beerRows.isEmpty(), "Search results should not be empty");
+            for (WebElement row : beerRows) {
+                WebElement nameElement = row.findElement(By.cssSelector("td[id^='beerName-']"));
+                assertTrue(nameElement.getText().toLowerCase().contains("galaxy cat"), "All results should contain 'Galaxy Cat' in the name");
+            }
         }
     }
 
