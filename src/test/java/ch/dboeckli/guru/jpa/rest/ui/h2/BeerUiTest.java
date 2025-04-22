@@ -113,21 +113,20 @@ class BeerUiTest {
 
         waitForPageLoad();
 
-        List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
-        assertFalse(beerRows.isEmpty(), "Search results should not be empty");
-
-        int rowIndex = 0;
-        for (WebElement row : beerRows) {
-            WebElement styleElement;
-            try {
-                styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
-            } catch(StaleElementReferenceException e) {
-                beerRows = webDriver.findElements(By.cssSelector("#beerTable tbody tr"));
-                row = beerRows.get(rowIndex);
-                styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
+        try {
+            List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
+            assertFalse(beerRows.isEmpty(), "Search results should not be empty");
+            for (WebElement row : beerRows) {
+                WebElement styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
+                assertEquals(BeerStyleEnum.PALE_ALE.name(), styleElement.getText(), "All results should have PALE_ALE style");
             }
-            assertEquals(BeerStyleEnum.PALE_ALE.name(), styleElement.getText(), "All results should have PALE_ALE style");
-            rowIndex++;
+        } catch (StaleElementReferenceException e) {
+            List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
+            assertFalse(beerRows.isEmpty(), "Search results should not be empty");
+            for (WebElement row : beerRows) {
+                WebElement styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
+                assertEquals(BeerStyleEnum.PALE_ALE.name(), styleElement.getText(), "All results should have PALE_ALE style");
+            }
         }
     }
 
