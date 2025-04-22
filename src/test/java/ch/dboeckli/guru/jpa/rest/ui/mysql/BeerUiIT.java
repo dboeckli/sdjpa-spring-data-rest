@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -223,7 +224,8 @@ class BeerUiIT {
         String editButtonId = editButton.getAttribute("id");
         String beerId = StringUtils.substringAfter(editButtonId, "editBeer-");
 
-        editButton.click();
+        Actions actions = new Actions(webDriver);
+        actions.moveToElement(editButton).click().perform();
 
         // Wait for the edit page to load
         wait.until(ExpectedConditions.urlContains(BEER_PAGE + "/edit/"));
@@ -276,7 +278,8 @@ class BeerUiIT {
 
         // Click on the "Create New Beer" button
         WebElement newBeerButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("createNewBeer")));
-        newBeerButton.click();
+        Actions actions = new Actions(webDriver);
+        actions.moveToElement(newBeerButton).click().perform();
 
         // Wait for the new beer form to load
         wait.until(ExpectedConditions.urlContains(BEER_PAGE + "/new"));

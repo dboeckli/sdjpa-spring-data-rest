@@ -222,22 +222,15 @@ class BeerUiTest {
         WebElement editButton = wait.until(ExpectedConditions.presenceOfElementLocated(
             By.cssSelector("a[id^='editBeer-']")
         ));
-        // Scroll the element into view
-        Actions actions = new Actions(webDriver);
-        //actions.moveToElement(editButton).click().perform();
-        //JavascriptExecutor jse = (JavascriptExecutor)webDriver;
-        //jse.executeScript("arguments[0].scrollIntoView()", editButton);
-
         // Now wait for it to be clickable
         editButton = wait.until(ExpectedConditions.elementToBeClickable(editButton));
 
         // Extract the beer ID from the edit button's ID
         String editButtonId = editButton.getAttribute("id");
         String beerId = StringUtils.substringAfter(editButtonId, "editBeer-");
-        log.info("Clicking edit button for beer ID: {}", beerId);
-        //editButton.click();
+
+        Actions actions = new Actions(webDriver);
         actions.moveToElement(editButton).click().perform();
-        log.info("Clicking edit button for beer ID done: {}", beerId);
 
         // Wait for the edit page to load
         wait.until(ExpectedConditions.urlContains(BEER_PAGE + "/edit/"));
@@ -290,7 +283,8 @@ class BeerUiTest {
 
         // Click on the "Create New Beer" button
         WebElement newBeerButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("createNewBeer")));
-        newBeerButton.click();
+        Actions actions = new Actions(webDriver);
+        actions.moveToElement(newBeerButton).click().perform();
 
         // Wait for the new beer form to load
         wait.until(ExpectedConditions.urlContains(BEER_PAGE + "/new"));
