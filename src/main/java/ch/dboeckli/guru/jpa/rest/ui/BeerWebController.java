@@ -1,6 +1,7 @@
 package ch.dboeckli.guru.jpa.rest.ui;
 
 import ch.dboeckli.guru.jpa.rest.domain.Beer;
+import ch.dboeckli.guru.jpa.rest.domain.BeerStyleEnum;
 import ch.dboeckli.guru.jpa.rest.repository.BeerRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -142,6 +143,61 @@ public class BeerWebController {
         beerRepository.deleteById(id);
         log.info("Deleted beer with ID: {}", id);
         return REDIRECT_PREFIX + LIST_BEERS_PAGE;
+    }
+
+    @GetMapping("/" + BEERS_TEMPLATE + "/search")
+    public String searchBeers(Model model,
+                              @RequestParam(required = false) String beerName,
+                              @RequestParam(required = false) BeerStyleEnum beerStyle,
+                              @RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "25") int size) {
+        Page<Beer> beerPage;
+
+        if (beerName != null && !beerName.isEmpty() && beerStyle != null) {
+            beerPage = beerRepository.findAllByBeerNameAndBeerStyle(beerName, beerStyle, PageRequest.of(page, size));
+        } else if (beerName != null && !beerName.isEmpty()) {
+            beerPage = beerRepository.findAllByBeerName(beerName, PageRequest.of(page, size));
+        } else if (beerStyle != null) {
+            beerPage = beerRepository.findAllByBeerStyle(beerStyle, PageRequest.of(page, size));
+        } else {
+            beerPage = beerRepository.findAll(PageRequest.of(page, size));
+        }
+
+        model.addAttribute("beers", beerPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", beerPage.getTotalPages());
+        model.addAttribute("totalItems", beerPage.getTotalElements());
+        model.addAttribute("beerName", beerName);
+        model.addAttribute("beerStyle", beerStyle);
+
+        int totalPages = beerPage.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                .boxed()
+                .toList();
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+
+        // Calculate start and end page numbers for pagination
+        int paginationSize = 5; // Number of page links to show
+        int startPage = Math.max(0, page - paginationSize / 2);
+        int endPage = Math.min(totalPages - 1, startPage + paginationSize - 1);
+
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
+        return BEERS_TEMPLATE;
+    }
+
+    @GetMapping("/" + BEER_TEMPLATE + "/search/upc")
+    public String findBeerByUpc(@RequestParam String upc, Model model) {
+        Beer beer = beerRepository.findByUpc(upc);
+        if (beer != null) {
+            model.addAttribute("beer", beer);
+            return BEER_TEMPLATE;
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Beer not found with UPC: " + upc);
+        }
     }
     
 }
