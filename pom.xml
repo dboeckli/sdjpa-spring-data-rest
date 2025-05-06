@@ -40,7 +40,7 @@
         <maven.compiler.target>21</maven.compiler.target>
 
         <!-- https://springdoc.org/#what-is-the-compatibility-matrix-of-springdoc-openapi-with-spring-boot -->
-        <springdoc.openapi.version>2.8.6</springdoc.openapi.version>
+        <springdoc.openapi.version>2.8.8</springdoc.openapi.version>
 
         <logbook.version>3.12.0</logbook.version>
         <logstash-logback.version>8.1</logstash-logback.version>
