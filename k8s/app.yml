@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
         - name: sdjpa-spring-data-rest
-          image: domboeckli/sdjpa-spring-data-rest:0.0.1-SNAPSHOT
+          image: @docker.repo@/sdjpa-spring-data-rest:0.0.1-SNAPSHOT
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: mysql
