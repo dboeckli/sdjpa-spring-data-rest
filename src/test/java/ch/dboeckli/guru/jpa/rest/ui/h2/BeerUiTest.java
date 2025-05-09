@@ -14,6 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -230,6 +231,7 @@ class BeerUiTest {
 
     @Test
     @Order(97)
+    @Transactional
     void testEditBeer() {
         // Navigate to the beer list page
         webDriver.get("http://localhost:" + port + LIST_BEERS_PAGE);
@@ -289,6 +291,7 @@ class BeerUiTest {
 
     @Test
     @Order(98)
+    @Transactional
     void testCreateNewBeer() {
         // Navigate to the beer list page
         webDriver.get("http://localhost:" + port + LIST_BEERS_PAGE);
@@ -372,6 +375,7 @@ class BeerUiTest {
 
     @Test
     @Order(99)
+    @Transactional
     void testDeleteBeer() {
         // Navigate to the beer list page
         webDriver.get("http://localhost:" + port + LIST_BEERS_PAGE);

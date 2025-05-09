@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import org.springframework.validation.MapBindingResult;
@@ -26,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+//@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Slf4j
 class BeerWebControllerTest {
 
@@ -86,6 +87,7 @@ class BeerWebControllerTest {
     }
 
     @Test
+    @Transactional
     @Order(2)
     void testEditBeer() {
         // First, get a list of beers to obtain a valid ID
@@ -137,6 +139,7 @@ class BeerWebControllerTest {
     }
 
     @Test
+    @Transactional
     @Order(3)
     void testCreateBeer() {
         Model beerFormModel = new ExtendedModelMap();
@@ -159,6 +162,7 @@ class BeerWebControllerTest {
     }
 
     @Test
+    @Transactional
     @Order(99)
     void testDeleteBeer() {
         // First, get a list of beers to obtain a valid ID
