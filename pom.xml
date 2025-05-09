@@ -33,7 +33,9 @@
         <skip.docker.build>false</skip.docker.build>
         <skip.docker.publish>true</skip.docker.publish>
         <skip.start.stop.springboot>false</skip.start.stop.springboot>
+
         <docker.image.tag>development</docker.image.tag> <!-- for feature branches -->
+        <docker.repo>local</docker.repo>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
@@ -96,6 +98,7 @@
             <properties>
                 <github.acions.build>true</github.acions.build>
                 <skip.docker.publish>false</skip.docker.publish>
+                <docker.repo>domboeckli</docker.repo>
             </properties>
         </profile>
     </profiles>
@@ -294,8 +297,8 @@
                         <exclude>.mvn/**</exclude>
                         <exclude>.idea/**</exclude>
                         <exclude>**/banner.txt</exclude>
-                        <exclude>mvn</exclude>
-                        <exclude>mvn.cmd</exclude>
+                        <exclude>mvnw</exclude>
+                        <exclude>mvnw.cmd</exclude>
                     </excludes>
                 </configuration>
             </plugin>

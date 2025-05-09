@@ -123,7 +123,7 @@ class BeerControllerTest {
 
     @Test
     void testFindByUpc() throws Exception {
-        String testUpc = "0631234200036";
+        String testUpc = "8380495518610";
         mockMvc.perform(get("/api/v9/beer/search/findByUpc")
                 .param("upc", testUpc)
                 .accept(MediaType.APPLICATION_JSON))
