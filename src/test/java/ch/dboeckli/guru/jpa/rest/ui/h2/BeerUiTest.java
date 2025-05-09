@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+//@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS) // TODO. Make this work properly with @DirtiesContext
 @Slf4j
 class BeerUiTest {
 
