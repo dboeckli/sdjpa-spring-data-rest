@@ -13,8 +13,8 @@ Key features:
 
 ## Swagger/Openapi Url
 
-http://localhost:8080/swagger-ui/index.html
-http://localhost:8080/v3/api-docs
+- local: http://localhost:8080/swagger-ui/index.html, http://localhost:8080/v3/api-docs
+- k8s: http://localhost:30080/swagger-ui/index.html, http://localhost:30080/v3/api-docs
 
 ## Web Interface
 
@@ -26,7 +26,8 @@ This application includes a web interface that allows users to interact with the
 
 To access the web interface, start the application and navigate to:
 
-http://localhost:8080/web/beers
+- local: http://localhost:8080/web/beers
+- k8s: http://localhost:30080/web/beers
 
 
 ## Flyway
