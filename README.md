@@ -83,7 +83,7 @@ cd target/helm/repo
 
 unpack
 ```powershell
-$file = Get-ChildItem -Filter *.tgz | Select-Object -First 1
+$file = Get-ChildItem -Filter sdjpa-spring-data-rest-v*.tgz | Select-Object -First 1
 tar -xvf $file.Name
 ```
 
@@ -95,11 +95,17 @@ helm upgrade --install $APPLICATION_NAME ./$APPLICATION_NAME --namespace sdjpa-s
 
 show logs
 ```powershell
-kubectl get pods -l app.kubernetes.io/name=$APPLICATION_NAME -n sdjpa-spring-data-rest
+kubectl get pods -n sdjpa-spring-data-rest
 ```
+
 replace $POD with pods from the command above
 ```powershell
 kubectl logs $POD -n sdjpa-spring-data-rest --all-containers
+```
+
+Show Endpoints
+```powershell
+kubectl get endpoints -n sdjpa-intro
 ```
 
 uninstall
