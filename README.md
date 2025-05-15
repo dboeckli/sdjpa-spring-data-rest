@@ -13,8 +13,8 @@ Key features:
 
 ## Swagger/Openapi Url
 
-http://localhost:8080/swagger-ui/index.html
-http://localhost:8080/v3/api-docs
+- local: http://localhost:8080/swagger-ui/index.html, http://localhost:8080/v3/api-docs
+- k8s: http://localhost:30080/swagger-ui/index.html, http://localhost:30080/v3/api-docs
 
 ## Web Interface
 
@@ -26,7 +26,8 @@ This application includes a web interface that allows users to interact with the
 
 To access the web interface, start the application and navigate to:
 
-http://localhost:8080/web/beers
+- local: http://localhost:8080/web/beers
+- k8s: http://localhost:30080/web/beers
 
 
 ## Flyway
@@ -56,12 +57,12 @@ Deployment goes into the default namespace.
 
 To deploy all resources:
 ```bash
-kubectl apply -f k8s/
+kubectl apply -f target/k8s/
 ```
 
 To remove all resources:
 ```bash
-kubectl delete -f k8s/
+kubectl delete -f target/k8s/
 ```
 
 Check
@@ -83,7 +84,7 @@ cd target/helm/repo
 
 unpack
 ```powershell
-$file = Get-ChildItem -Filter *.tgz | Select-Object -First 1
+$file = Get-ChildItem -Filter sdjpa-spring-data-rest-v*.tgz | Select-Object -First 1
 tar -xvf $file.Name
 ```
 
@@ -95,11 +96,17 @@ helm upgrade --install $APPLICATION_NAME ./$APPLICATION_NAME --namespace sdjpa-s
 
 show logs
 ```powershell
-kubectl get pods -l app.kubernetes.io/name=$APPLICATION_NAME -n sdjpa-spring-data-rest
+kubectl get pods -n sdjpa-spring-data-rest
 ```
+
 replace $POD with pods from the command above
 ```powershell
 kubectl logs $POD -n sdjpa-spring-data-rest --all-containers
+```
+
+Show Endpoints
+```powershell
+kubectl get endpoints -n sdjpa-intro
 ```
 
 uninstall
