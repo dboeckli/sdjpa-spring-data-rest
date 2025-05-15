@@ -57,12 +57,12 @@ Deployment goes into the default namespace.
 
 To deploy all resources:
 ```bash
-kubectl apply -f k8s/
+kubectl apply -f target/k8s/
 ```
 
 To remove all resources:
 ```bash
-kubectl delete -f k8s/
+kubectl delete -f target/k8s/
 ```
 
 Check
