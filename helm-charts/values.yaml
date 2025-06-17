@@ -56,5 +56,7 @@ mysql:
 
   rootPassword: password
 
+  serviceFQDN:
+
 ingress:
   enabled: false
