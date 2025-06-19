@@ -11,3 +11,4 @@ dependencies:
   - name: sdjpa-spring-data-rest-mysql
     version: @helm.chart.version@
     repository: file://charts/sdjpa-spring-data-rest-mysql
+    condition: mysql.enabled
