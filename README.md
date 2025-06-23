@@ -106,7 +106,17 @@ kubectl logs $POD -n sdjpa-spring-data-rest --all-containers
 
 Show Endpoints
 ```powershell
-kubectl get endpoints -n sdjpa-intro
+kubectl get endpoints -n sdjpa-spring-data-rest
+```
+
+test
+```powershell
+helm test $APPLICATION_NAME --namespace sdjpa-spring-data-rest --logs
+```
+
+status
+```powershell
+helm status $APPLICATION_NAME --namespace sdjpa-spring-data-rest
 ```
 
 uninstall
