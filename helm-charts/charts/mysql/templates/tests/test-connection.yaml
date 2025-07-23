@@ -37,10 +37,6 @@ spec:
         - secretRef:
             name: {{ include "sdjpa-spring-data-rest-mysql.fullname" . }}-secrets
       env:
-        - name: MYSQL_CARDHOLDER_DB
-          value: {{ .Values.mysql.cardholderdb.name }}
-        - name: MYSQL_CARD_DB
-          value: {{ .Values.mysql.carddb.name }}
-        - name: MYSQL_PAN_DB
-          value: {{ .Values.mysql.pandb.name }}
+        - name: MYSQL_DATABASE
+          value: {{ .Values.mysql.database }}
   restartPolicy: Never
