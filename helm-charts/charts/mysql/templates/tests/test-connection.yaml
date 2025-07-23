@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "sdjpa-spring-data-rest-mysql.fullname" . }}-test-connection"
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    {{- include "sdjpa-spring-data-rest-mysql.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: test-mysql-connection
+      image: {{ .Values.mysqlImage.repository }}:{{ .Values.mysqlImage.tag }}
+      imagePullPolicy: {{ .Values.mysqlImage.pullPolicy }}
+      command: [ '/bin/sh', '-c' ]
+      args:
+        - |
+          echo "### Test 1a: MySQL Connection using user: $MYSQL_USER"
+          mysql -h{{ include "sdjpa-spring-data-rest-mysql.fullname" . }} \
+                -P{{ .Values.mysql.port }} \
+                -u$MYSQL_USER \
+                -p$MYSQL_PASSWORD \
+                --database={{ .Values.mysql.database }} \
+                -e "SELECT 1; SELECT DATABASE();"
+          echo "Exit code: $?"
+
+          echo "### Test 1b: MySQL Connection using user: $MYSQL_ADMIN_USER"
+          mysql -h{{ include "sdjpa-spring-data-rest-mysql.fullname" . }} \
+                -P{{ .Values.mysql.port }} \
+                -u$MYSQL_ADMIN_USER \
+                -p$MYSQL_ADMIN_PASSWORD \
+                --database={{ .Values.mysql.database }} \
+                -e "SELECT 1; SELECT DATABASE();"
+          echo "Exit code: $?"
+
+      envFrom:
+        - secretRef:
+            name: {{ include "sdjpa-spring-data-rest-mysql.fullname" . }}-secrets
+      env:
+        - name: MYSQL_CARDHOLDER_DB
+          value: {{ .Values.mysql.cardholderdb.name }}
+        - name: MYSQL_CARD_DB
+          value: {{ .Values.mysql.carddb.name }}
+        - name: MYSQL_PAN_DB
+          value: {{ .Values.mysql.pandb.name }}
+  restartPolicy: Never
