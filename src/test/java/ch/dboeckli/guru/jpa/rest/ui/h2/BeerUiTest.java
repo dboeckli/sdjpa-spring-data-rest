@@ -13,7 +13,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
@@ -40,6 +39,7 @@ class BeerUiTest {
     void setUp() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless");  // Run in headless mode
+        options.addArguments("--window-size=1920,1080");
         webDriver = new ChromeDriver(options);
     }
 

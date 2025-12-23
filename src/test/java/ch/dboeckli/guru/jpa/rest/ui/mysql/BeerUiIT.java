@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 @Slf4j
 class BeerUiIT {
 
@@ -39,6 +39,7 @@ class BeerUiIT {
     void setUp() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless");  // Run in headless mode
+        options.addArguments("--window-size=1920,1080");
         webDriver = new ChromeDriver(options);
     }
 
