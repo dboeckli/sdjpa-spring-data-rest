@@ -1,17 +1,17 @@
 package ch.dboeckli.guru.jpa.rest.controller.mysql;
 
 import ch.dboeckli.guru.jpa.rest.domain.Beer;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -59,8 +59,8 @@ class BeerControllerIT {
         JsonNode beersNode = rootNode.path("_embedded").path("beer");
 
         // Convert the beers node to a List of Beer objects
-        List<Beer> beerList = objectMapper.readValue(
-            beersNode.traverse(),
+        List<Beer> beerList = objectMapper.treeToValue(
+            beersNode,
             objectMapper.getTypeFactory().constructCollectionType(List.class, Beer.class)
         );
 
@@ -69,7 +69,7 @@ class BeerControllerIT {
 
         // Get the first beer
         JsonNode firstBeer = beersNode.get(0);
-        String firstBeerSelfLink = firstBeer.path("_links").path("self").path("href").asText();
+        String firstBeerSelfLink = firstBeer.path("_links").path("self").path("href").asString();
 
         log.info("First beer self link: {}", firstBeerSelfLink);
         // Perform GET request to fetch the first beer's details

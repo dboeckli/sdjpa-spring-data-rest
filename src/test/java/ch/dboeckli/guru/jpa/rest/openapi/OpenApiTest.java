@@ -1,15 +1,15 @@
-package ch.dboeckli.guru.jpa.rest.core;
+package ch.dboeckli.guru.jpa.rest.openapi;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -45,13 +45,13 @@ class OpenApiTest {
         assertAll("OpenAPI Info validations",
             () -> assertThat(jsonNode.has("info")).isTrue(),
             () -> assertThat(infoNode.has("title")).isTrue(),
-            () -> assertThat(infoNode.get("title").asText()).isEqualTo(buildProperties.getName()),
-            () -> assertThat(infoNode.get("version").asText()).isEqualTo(buildProperties.getVersion()),
+            () -> assertThat(infoNode.get("title").asString()).isEqualTo(buildProperties.getName()),
+            () -> assertThat(infoNode.get("version").asString()).isEqualTo(buildProperties.getVersion()),
             () -> assertThat(infoNode.has("description")).isTrue(),
-            () -> assertThat(infoNode.get("description").asText()).isEqualTo("Some long and useful description"),
+            () -> assertThat(infoNode.get("description").asString()).isEqualTo("Some long and useful description"),
             () -> assertThat(infoNode.has("license")).isTrue(),
-            () -> assertThat(infoNode.get("license").get("name").asText()).isEqualTo("Apache 2.0"),
-            () -> assertThat(infoNode.get("license").get("url").asText()).isEqualTo("https://www.apache.org/licenses/LICENSE-2.0")
+            () -> assertThat(infoNode.get("license").get("name").asString()).isEqualTo("Apache 2.0"),
+            () -> assertThat(infoNode.get("license").get("url").asString()).isEqualTo("https://www.apache.org/licenses/LICENSE-2.0")
         );
     }
 
