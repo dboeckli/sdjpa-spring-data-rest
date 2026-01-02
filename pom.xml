@@ -41,7 +41,7 @@
         <docker.repo>local</docker.repo>
 
         <!-- https://springdoc.org/#what-is-the-compatibility-matrix-of-springdoc-openapi-with-spring-boot -->
-        <springdoc.openapi.version>3.0.0</springdoc.openapi.version>
+        <springdoc.openapi.version>3.0.1</springdoc.openapi.version>
 
         <logstash-logback.version>9.0</logstash-logback.version>
         <editorconfig-maven-plugin.version>0.2.0</editorconfig-maven-plugin.version>
