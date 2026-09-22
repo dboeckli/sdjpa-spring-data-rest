@@ -1,7 +1,7 @@
 name: Deploy and Test Cluster
 run-name: >
   ${{ github.workflow }}: ${{ github.event_name }} for ${{ github.ref_name }} by @${{ github.actor }}
-  
+
 env:
   JAVA_VERSION: 25
 
@@ -57,25 +57,23 @@ jobs:
           DOCKER_USER: ${{ vars.DOCKER_USER }}
           APPLICATION_NAME: ${{ inputs.application-name }}
         run: |
-          echo "Pulling Helm Chart Version: $HELM_CHART_VERSION from oci://registry-1.docker.io/$DOCKER_USER/$APPLICATION_NAME"
-          helm pull oci://registry-1.docker.io/$DOCKER_USER/$APPLICATION_NAME --version "$HELM_CHART_VERSION"
-          tar -xvf $APPLICATION_NAME-v*.tgz  
+          echo "Pulling Helm Chart Version: $HELM_CHART_VERSION from oci://registry-1.docker.io/$DOCKER_USER/$APPLICATION_NAME-chart"
+          helm pull oci://registry-1.docker.io/$DOCKER_USER/$APPLICATION_NAME-chart --version "$HELM_CHART_VERSION"
+          tar -xvf $APPLICATION_NAME-*.tgz  
 
       - name: Deploy application with Helm
         env:
-          APP_VERSION: ${{ inputs.version }}
+          APP_VERSION: ${{ inputs.helm-chart-version }}
           APPLICATION_NAME: ${{ inputs.application-name }}
           NAMESPACE: ${{ inputs.namespace }}
         run: |
           # Install/upgrade the Helm chart
           echo "Deploying Application $APPLICATION_NAME: $APP_VERSION"
-          helm upgrade --install $APPLICATION_NAME ./$APPLICATION_NAME \
-          --set image.tag=${APP_VERSION} \
+          helm upgrade --install $APPLICATION_NAME ./$APPLICATION_NAME-chart \
           --namespace ${NAMESPACE} \
           --create-namespace \
           --wait --timeout 5m \
-          --debug \
-          --render-subchart-notes
+          --debug
 
       - name: Wait for Pods to be ready
         env:
@@ -95,34 +93,32 @@ jobs:
 
       - name: Test Application
         env:
-          APP_VERSION: ${{ inputs.version }}
+          APP_VERSION: ${{ inputs.helm-chart-version }}
           APPLICATION_NAME: ${{ inputs.application-name }}
           NAMESPACE: ${{ inputs.namespace }}
         run: |
-          echo "::group::Application Deployment Status"
-          echo "Checking status of $APPLICATION_NAME (version $APP_VERSION) in namespace $NAMESPACE"
-          echo "Helm Release Details:"
-          helm status $APPLICATION_NAME --namespace ${NAMESPACE}
-          echo "::endgroup::"
-          
-          echo "::group::Helm Test Raw Output"
           echo "Testing Application $APPLICATION_NAME: $APP_VERSION"
+          # Do not let the runner's `set -e` abort before the test output is printed.
+          set +e
           TEST_OUTPUT=$(helm test $APPLICATION_NAME --namespace ${NAMESPACE} --logs)
           TEST_EXIT_CODE=$?
+          set -e
+
+          echo "::group::Helm Test Raw Output"
           echo "Exit Code: $TEST_EXIT_CODE"
           echo "$TEST_OUTPUT"
           echo "::endgroup::"
-          
+
           # Check all test exit codes
           if echo "$TEST_OUTPUT" | grep -q "Exit code: [^0]"; then
-            echo "::error::One or more Helm tests failed. See details above:"
+            echo "::error::One or more Helm tests failed. See details below:"
             exit 1
           elif [ $TEST_EXIT_CODE -ne 0 ]; then
             echo "::error::Helm test command failed with exit code $TEST_EXIT_CODE"
             exit $TEST_EXIT_CODE
           else
             echo "All Helm tests passed successfully."
-          fi  
+          fi
 
       - name: Display Deployment Information
         env:

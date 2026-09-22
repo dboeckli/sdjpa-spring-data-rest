@@ -26,24 +26,26 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 @Slf4j
 public class BeerWebController {
-    
+
     public static final String WEB_BASE_PATH = "/web";
-    
-    public static final String BEERS_TEMPLATE = "beers"  ;
+
+    public static final String BEERS_TEMPLATE = "beers";
+
     public static final String BEER_TEMPLATE = "beer";
+
     public static final String BEER_FORM_TEMPLATE = "beerForm";
-    
+
     public static final String LIST_BEERS_PAGE = WEB_BASE_PATH + "/" + BEERS_TEMPLATE;
+
     public static final String BEER_PAGE = WEB_BASE_PATH + "/" + BEER_TEMPLATE;
 
     public static final String REDIRECT_PREFIX = "redirect:";
-    
+
     private final BeerRepository beerRepository;
 
     @GetMapping("/" + BEERS_TEMPLATE)
-    public String listBeers(Model model,
-                            @RequestParam(defaultValue = "0") int page,
-                            @RequestParam(defaultValue = "25") int size) {
+    public String listBeers(Model model, @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "25") int size) {
         Page<Beer> beerPage = beerRepository.findAll(PageRequest.of(page, size));
         model.addAttribute("beers", beerPage.getContent());
         model.addAttribute("currentPage", page);
@@ -52,9 +54,7 @@ public class BeerWebController {
 
         int totalPages = beerPage.getTotalPages();
         if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                .boxed()
-                .toList();
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages).boxed().toList();
             model.addAttribute("pageNumbers", pageNumbers);
         }
 
@@ -89,14 +89,15 @@ public class BeerWebController {
         if (bindingResult.hasErrors()) {
             log.warn("Validation errors occurred: {}", bindingResult.getAllErrors());
             List<String> fieldsToIgnore = List.of("createdDate", "lastModifiedDate");
-            boolean hasOtherErrors = bindingResult.getFieldErrors().stream()
+            boolean hasOtherErrors = bindingResult.getFieldErrors()
+                .stream()
                 .anyMatch(error -> !fieldsToIgnore.contains(error.getField()));
 
             if (hasOtherErrors) {
                 log.error("Validation errors occurred: {}", bindingResult.getAllErrors());
                 model.addAttribute("beer", beer);
                 return BEER_FORM_TEMPLATE;
-            } 
+            }
         }
         Beer newBeer = new Beer();
         newBeer.setBeerName(beer.getBeerName());
@@ -114,7 +115,8 @@ public class BeerWebController {
     @GetMapping("/" + BEER_TEMPLATE + "/edit/{id}")
     public String editBeerForm(@PathVariable UUID id, Model model) {
         log.info("Updating existing beer in form");
-        Beer beer = beerRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Beer not found"));
+        Beer beer = beerRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Beer not found"));
         model.addAttribute("beer", beer);
         return BEER_FORM_TEMPLATE;
     }
@@ -123,15 +125,15 @@ public class BeerWebController {
     public String updateBeer(@PathVariable UUID id, @Valid @ModelAttribute("beer") Beer beer) {
         log.info("### Updating beer: {}", id);
         Beer existingBeer = beerRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Beer not found"));
-        
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Beer not found"));
+
         // Update the fields of the existing beer
         existingBeer.setBeerName(beer.getBeerName());
         existingBeer.setBeerStyle(beer.getBeerStyle());
         existingBeer.setUpc(beer.getUpc());
         existingBeer.setQuantityOnHand(beer.getQuantityOnHand());
         existingBeer.setPrice(beer.getPrice());
-        
+
         beerRepository.save(existingBeer);
         log.info("### Updating beer: {} to {}", existingBeer, beer);
         return REDIRECT_PREFIX + LIST_BEERS_PAGE;
@@ -146,20 +148,21 @@ public class BeerWebController {
     }
 
     @GetMapping("/" + BEERS_TEMPLATE + "/search")
-    public String searchBeers(Model model,
-                              @RequestParam(required = false) String beerName,
-                              @RequestParam(required = false) BeerStyleEnum beerStyle,
-                              @RequestParam(defaultValue = "0") int page,
-                              @RequestParam(defaultValue = "25") int size) {
+    public String searchBeers(Model model, @RequestParam(required = false) String beerName,
+            @RequestParam(required = false) BeerStyleEnum beerStyle, @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "25") int size) {
         Page<Beer> beerPage;
 
         if (beerName != null && !beerName.isEmpty() && beerStyle != null) {
             beerPage = beerRepository.findAllByBeerNameAndBeerStyle(beerName, beerStyle, PageRequest.of(page, size));
-        } else if (beerName != null && !beerName.isEmpty()) {
+        }
+        else if (beerName != null && !beerName.isEmpty()) {
             beerPage = beerRepository.findAllByBeerName(beerName, PageRequest.of(page, size));
-        } else if (beerStyle != null) {
+        }
+        else if (beerStyle != null) {
             beerPage = beerRepository.findAllByBeerStyle(beerStyle, PageRequest.of(page, size));
-        } else {
+        }
+        else {
             beerPage = beerRepository.findAll(PageRequest.of(page, size));
         }
 
@@ -172,9 +175,7 @@ public class BeerWebController {
 
         int totalPages = beerPage.getTotalPages();
         if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                .boxed()
-                .toList();
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages).boxed().toList();
             model.addAttribute("pageNumbers", pageNumbers);
         }
 
@@ -195,9 +196,10 @@ public class BeerWebController {
         if (beer != null) {
             model.addAttribute("beer", beer);
             return BEER_TEMPLATE;
-        } else {
+        }
+        else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Beer not found with UPC: " + upc);
         }
     }
-    
+
 }

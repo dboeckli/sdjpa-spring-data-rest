@@ -18,9 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(indexes = {
-    @Index(name = "idx_beer_name", columnList = "beerName")
-})
+@Table(indexes = { @Index(name = "idx_beer_name", columnList = "beerName") })
 public class Beer {
 
     @Id
@@ -41,6 +39,7 @@ public class Beer {
     private String upc;
 
     private Integer quantityOnHand;
+
     private BigDecimal price;
 
     @CreationTimestamp
@@ -49,4 +48,5 @@ public class Beer {
 
     @UpdateTimestamp
     private Timestamp lastModifiedDate;
+
 }

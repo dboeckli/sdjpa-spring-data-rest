@@ -29,30 +29,30 @@ class BeerRepositoryTest {
     void findAllByBeerStyle() {
         Page<Beer> beerPage = beerRepository.findAllByBeerStyle(BeerStyleEnum.ALE, Pageable.unpaged());
         assertEquals(3, beerPage.getTotalElements());
-        beerPage.getContent().forEach(beer -> assertAll(
-            () -> assertEquals(BeerStyleEnum.ALE, beer.getBeerStyle()),
-            () -> assertTrue(
-                beer.getBeerName().equals("Mango Bobs") ||
-                beer.getBeerName().equals("Beach Blond Ale") ||
-                beer.getBeerName().equals("Rod Bender Red Ale"))
-        ));
+        beerPage.getContent()
+            .forEach(
+                    beer -> assertAll(() -> assertEquals(BeerStyleEnum.ALE, beer.getBeerStyle()),
+                            () -> assertTrue(beer.getBeerName().equals("Mango Bobs")
+                                    || beer.getBeerName().equals("Beach Blond Ale")
+                                    || beer.getBeerName().equals("Rod Bender Red Ale"))));
     }
 
     @Test
     void findAllByBeerNameAndBeerStyle() {
-        Page<Beer> beerPage = beerRepository.findAllByBeerNameAndBeerStyle("Mango Bobs", BeerStyleEnum.ALE, Pageable.unpaged());
+        Page<Beer> beerPage = beerRepository.findAllByBeerNameAndBeerStyle("Mango Bobs", BeerStyleEnum.ALE,
+                Pageable.unpaged());
 
         assertEquals(1, beerPage.getTotalElements());
-        beerPage.getContent().forEach(beer -> assertAll(
-            () -> assertEquals("Mango Bobs", beer.getBeerName()),
-            () -> assertEquals(BeerStyleEnum.ALE, beer.getBeerStyle())
-        ));
+        beerPage.getContent()
+            .forEach(beer -> assertAll(() -> assertEquals("Mango Bobs", beer.getBeerName()),
+                    () -> assertEquals(BeerStyleEnum.ALE, beer.getBeerStyle())));
 
     }
 
     @Test
     void findByUpc() {
-       Beer beer = beerRepository.findByUpc(BEER_1_UPC);
-       assertEquals(BEER_1_UPC, beer.getUpc());
+        Beer beer = beerRepository.findByUpc(BEER_1_UPC);
+        assertEquals(BEER_1_UPC, beer.getUpc());
     }
+
 }

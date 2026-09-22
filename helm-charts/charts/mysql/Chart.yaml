@@ -1,6 +1,6 @@
 apiVersion: v2
-name: sdjpa-spring-data-rest-mysql
-description: A Helm subchart for Mysql used in Spring 6 Reactive MongoDB application
+name: sdjpa-spring-data-rest-mysql-chart
+description: A Helm subchart for Mysql
 type: application
 version: @helm.chart.version@
 appVersion: "8.4.6"
