@@ -11,6 +11,62 @@ Key features:
 - Docker and Kubernetes support for easy deployment
 - Swagger/OpenAPI documentation
 
+## Architecture Overview
+
+```mermaid
+graph LR
+    Client(["Client"])
+
+    subgraph App ["Spring Boot App :8080 (k8s :30080)"]
+        REST["Spring Data REST\nBeerRepository @ /api/v9/beer"]
+        WebUI["BeerWebController\n/web/beers (Thymeleaf)"]
+        Swagger["Swagger / OpenAPI\n/swagger-ui"]
+        Bootstrap["BeerLoader\n(seed data)"]
+        Repos["Spring Data JPA\nRepositories"]
+    end
+
+    subgraph Migration ["Schema Management"]
+        Flyway["Flyway\ndb/migration"]
+    end
+
+    subgraph Databases ["Databases"]
+        H2[("H2\nIn-Memory (h2 profile)")]
+        MySQL[("MySQL\nDocker Compose (mysql profile)")]
+    end
+
+    Client -->|"REST API"| REST
+    Client -->|"Web UI"| WebUI
+    Client -->|"API docs"| Swagger
+    REST --> Repos
+    WebUI --> Repos
+    Bootstrap --> Repos
+    Repos <--> H2
+    Repos <--> MySQL
+    Flyway --> MySQL
+```
+
+## Database Schema
+
+```mermaid
+erDiagram
+    beer {
+        CHAR(36)      id PK "UUID"
+        BIGINT        version "optimistic lock"
+        VARCHAR(255)  beer_name "indexed: idx_beer_name"
+        VARCHAR(50)   beer_style "enum: LAGER, PILSNER, STOUT, ..."
+        VARCHAR(255)  upc
+        INTEGER       quantity_on_hand
+        DECIMAL       price "precision 19,2"
+        TIMESTAMP     created_date
+        TIMESTAMP     last_modified_date
+    }
+
+    customer {
+        CHAR(36)     id PK "UUID"
+        VARCHAR(255) name "indexed: idx_customer_name"
+    }
+```
+
 ## Swagger/Openapi Url
 
 - local: http://localhost:8080/swagger-ui/index.html, http://localhost:8080/v3/api-docs
@@ -35,7 +91,7 @@ To enable Flyway in the MySQL profile, override the following properties when st
 - `spring.flyway.enabled = true`
 - `spring.docker.compose.file = compose-mysql.yaml`
 
-This profile starts MySQL on port 3306 using the Docker Compose file `compose-mysql-.yaml`.
+This profile starts MySQL on port 3306 using the Docker Compose file `compose-mysql.yaml`.
 
 ## Docker
 
