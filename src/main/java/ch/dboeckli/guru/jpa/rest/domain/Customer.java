@@ -14,10 +14,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(indexes = {
-    @Index(name = "idx_customer_name", columnList = "name")
-})
+@Table(indexes = { @Index(name = "idx_customer_name", columnList = "name") })
 public class Customer {
+
     @Id
     @GeneratedValue(generator = "UUID")
     @Column(columnDefinition = "char(36)", updatable = false, nullable = false)
@@ -25,4 +24,5 @@ public class Customer {
     private UUID id;
 
     private String name;
+
 }

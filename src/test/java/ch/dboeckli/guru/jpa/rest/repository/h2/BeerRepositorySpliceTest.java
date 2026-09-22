@@ -29,45 +29,36 @@ class BeerRepositorySpliceTest {
 
     @Test
     void findAllByBeerStyle() {
-        beerRepository.save(Beer.builder()
-            .beerName("Mango Bobs")
-            .beerStyle(BeerStyleEnum.IPA)
-            .build());
+        beerRepository.save(Beer.builder().beerName("Mango Bobs").beerStyle(BeerStyleEnum.IPA).build());
 
         Page<Beer> beerPage = beerRepository.findAllByBeerStyle(BeerStyleEnum.IPA, Pageable.unpaged());
         assertEquals(1, beerPage.getTotalElements());
-        beerPage.getContent().forEach(beer -> assertAll(
-            () -> assertEquals("Mango Bobs", beer.getBeerName()),
-            () -> assertEquals(BeerStyleEnum.IPA, beer.getBeerStyle())
-        ));
+        beerPage.getContent()
+            .forEach(beer -> assertAll(() -> assertEquals("Mango Bobs", beer.getBeerName()),
+                    () -> assertEquals(BeerStyleEnum.IPA, beer.getBeerStyle())));
     }
 
     @Test
     void findAllByBeerNameAndBeerStyle() {
-        beerRepository.save(Beer.builder()
-            .beerName("Mango Bobs")
-            .beerStyle(BeerStyleEnum.IPA)
-            .build());
+        beerRepository.save(Beer.builder().beerName("Mango Bobs").beerStyle(BeerStyleEnum.IPA).build());
 
-        Page<Beer> beerPage = beerRepository.findAllByBeerNameAndBeerStyle("Mango Bobs", BeerStyleEnum.IPA, Pageable.unpaged());
+        Page<Beer> beerPage = beerRepository.findAllByBeerNameAndBeerStyle("Mango Bobs", BeerStyleEnum.IPA,
+                Pageable.unpaged());
 
         assertEquals(1, beerPage.getTotalElements());
-        beerPage.getContent().forEach(beer -> assertAll(
-            () -> assertEquals("Mango Bobs", beer.getBeerName()),
-            () -> assertEquals(BeerStyleEnum.IPA, beer.getBeerStyle())
-        ));
+        beerPage.getContent()
+            .forEach(beer -> assertAll(() -> assertEquals("Mango Bobs", beer.getBeerName()),
+                    () -> assertEquals(BeerStyleEnum.IPA, beer.getBeerStyle())));
 
     }
 
     @Test
     void findByUpc() {
-        beerRepository.save(Beer.builder()
-            .beerName("Mango Bobs")
-            .beerStyle(BeerStyleEnum.IPA)
-            .upc("1234567890123")
-            .build());
+        beerRepository
+            .save(Beer.builder().beerName("Mango Bobs").beerStyle(BeerStyleEnum.IPA).upc("1234567890123").build());
 
-       Beer beer = beerRepository.findByUpc("1234567890123");
-       assertEquals("1234567890123", beer.getUpc());
+        Beer beer = beerRepository.findByUpc("1234567890123");
+        assertEquals("1234567890123", beer.getUpc());
     }
+
 }

@@ -1,3 +1,6 @@
+nameOverride: "sdjpa-spring-data-rest"
+fullnameOverride: "sdjpa-spring-data-rest"
+
 global:
   timezone: Europe/Zurich
   timezonePath: /etc/localtime
@@ -44,6 +47,9 @@ probes:
     failureThreshold: 6
 
 mysql:
+  enabled: true
+
+  fullnameOverride: sdjpa-spring-data-rest-mysql
   database: bookdb
 
   port: 3306
@@ -58,7 +64,7 @@ mysql:
 
   rootPassword: password
 
-  serviceFQDN:
+  serviceFQDN: "sdjpa-spring-data-rest-mysql.sdjpa-spring-data-rest.svc.cluster.local"
 
 ingress:
   enabled: false

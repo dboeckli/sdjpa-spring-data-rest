@@ -26,7 +26,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-//@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS) // TODO. Make this work properly with @DirtiesContext
+// @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS) // TODO. Make this
+// work properly with @DirtiesContext
 @Slf4j
 class BeerUiTest {
 
@@ -38,7 +39,7 @@ class BeerUiTest {
     @BeforeEach
     void setUp() {
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");  // Run in headless mode
+        options.addArguments("--headless"); // Run in headless mode
         options.addArguments("--window-size=1920,1080");
         webDriver = new ChromeDriver(options);
     }
@@ -65,7 +66,8 @@ class BeerUiTest {
         waitForPageLoad();
 
         WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
-        List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
+        List<WebElement> beerRows = wait
+            .until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
 
         log.info("### Found {} beer rows", beerRows.size());
 
@@ -84,23 +86,29 @@ class BeerUiTest {
         WebElement beerNameInput = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("beerName")));
         beerNameInput.sendKeys("Galaxy Cat");
 
-        WebElement searchButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
+        WebElement searchButton = wait
+            .until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
         searchButton.click();
 
         waitForPageLoad();
         try {
-            List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
+            List<WebElement> beerRows = wait
+                .until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
             assertFalse(beerRows.isEmpty(), "Search results should not be empty");
             for (WebElement row : beerRows) {
                 WebElement nameElement = row.findElement(By.cssSelector("td[id^='beerName-']"));
-                assertTrue(nameElement.getText().toLowerCase().contains("galaxy cat"), "All results should contain 'Galaxy Cat' in the name");
+                assertTrue(nameElement.getText().toLowerCase().contains("galaxy cat"),
+                        "All results should contain 'Galaxy Cat' in the name");
             }
-        } catch (StaleElementReferenceException e) {
-            List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
+        }
+        catch (StaleElementReferenceException e) {
+            List<WebElement> beerRows = wait
+                .until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
             assertFalse(beerRows.isEmpty(), "Search results should not be empty");
             for (WebElement row : beerRows) {
                 WebElement nameElement = row.findElement(By.cssSelector("td[id^='beerName-']"));
-                assertTrue(nameElement.getText().toLowerCase().contains("galaxy cat"), "All results should contain 'Galaxy Cat' in the name");
+                assertTrue(nameElement.getText().toLowerCase().contains("galaxy cat"),
+                        "All results should contain 'Galaxy Cat' in the name");
             }
         }
     }
@@ -116,23 +124,29 @@ class BeerUiTest {
         WebElement beerStyleSelect = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("beerStyle")));
         beerStyleSelect.sendKeys(BeerStyleEnum.PALE_ALE.name());
 
-        WebElement searchButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
+        WebElement searchButton = wait
+            .until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
         searchButton.click();
 
         waitForPageLoad();
         try {
-            List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
+            List<WebElement> beerRows = wait
+                .until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
             assertFalse(beerRows.isEmpty(), "Search results should not be empty");
             for (WebElement row : beerRows) {
                 WebElement styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
-                assertEquals(BeerStyleEnum.PALE_ALE.name(), styleElement.getText(), "All results should have PALE_ALE style");
+                assertEquals(BeerStyleEnum.PALE_ALE.name(), styleElement.getText(),
+                        "All results should have PALE_ALE style");
             }
-        } catch (StaleElementReferenceException e) {
-            List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
+        }
+        catch (StaleElementReferenceException e) {
+            List<WebElement> beerRows = wait
+                .until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
             assertFalse(beerRows.isEmpty(), "Search results should not be empty");
             for (WebElement row : beerRows) {
                 WebElement styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
-                assertEquals(BeerStyleEnum.PALE_ALE.name(), styleElement.getText(), "All results should have PALE_ALE style");
+                assertEquals(BeerStyleEnum.PALE_ALE.name(), styleElement.getText(),
+                        "All results should have PALE_ALE style");
             }
         }
     }
@@ -151,27 +165,35 @@ class BeerUiTest {
         WebElement beerStyleSelect = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("beerStyle")));
         beerStyleSelect.sendKeys(BeerStyleEnum.PALE_ALE.name());
 
-        WebElement searchButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
+        WebElement searchButton = wait
+            .until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
         searchButton.click();
 
         waitForPageLoad();
         try {
-            List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
+            List<WebElement> beerRows = wait
+                .until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
             assertFalse(beerRows.isEmpty(), "Search results should not be empty");
             for (WebElement row : beerRows) {
                 WebElement nameElement = row.findElement(By.cssSelector("td[id^='beerName-']"));
                 WebElement styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
-                assertTrue(nameElement.getText().toLowerCase().contains("galaxy cat"), "All results should contain 'Galaxy Cat' in the name");
-                assertEquals(BeerStyleEnum.PALE_ALE.name(), styleElement.getText(), "All results should have PALE_ALE style");
+                assertTrue(nameElement.getText().toLowerCase().contains("galaxy cat"),
+                        "All results should contain 'Galaxy Cat' in the name");
+                assertEquals(BeerStyleEnum.PALE_ALE.name(), styleElement.getText(),
+                        "All results should have PALE_ALE style");
             }
-        } catch (StaleElementReferenceException e) {
-            List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
+        }
+        catch (StaleElementReferenceException e) {
+            List<WebElement> beerRows = wait
+                .until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
             assertFalse(beerRows.isEmpty(), "Search results should not be empty");
             for (WebElement row : beerRows) {
                 WebElement nameElement = row.findElement(By.cssSelector("td[id^='beerName-']"));
                 WebElement styleElement = row.findElement(By.cssSelector("td[id^='beerStyle-']"));
-                assertTrue(nameElement.getText().toLowerCase().contains("galaxy cat"), "All results should contain 'Galaxy Cat' in the name");
-                assertEquals(BeerStyleEnum.PALE_ALE.name(), styleElement.getText(), "All results should have PALE_ALE style");
+                assertTrue(nameElement.getText().toLowerCase().contains("galaxy cat"),
+                        "All results should contain 'Galaxy Cat' in the name");
+                assertEquals(BeerStyleEnum.PALE_ALE.name(), styleElement.getText(),
+                        "All results should have PALE_ALE style");
             }
         }
     }
@@ -190,7 +212,8 @@ class BeerUiTest {
         upcInput.sendKeys("0631234200036");
 
         // Find and click the "Search by UPC" button
-        WebElement searchByUpcButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(), 'Search by UPC')]")));
+        WebElement searchByUpcButton = wait
+            .until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(), 'Search by UPC')]")));
         searchByUpcButton.click();
 
         waitForPageLoad();
@@ -223,10 +246,12 @@ class BeerUiTest {
 
         // Check if "Edit Beer" and "Delete Beer" buttons are present
         assertTrue(webDriver.findElement(By.id("editBeerButton")).isDisplayed(), "Edit Beer button should be visible");
-        assertTrue(webDriver.findElement(By.id("deleteBeerButton")).isDisplayed(), "Delete Beer button should be visible");
+        assertTrue(webDriver.findElement(By.id("deleteBeerButton")).isDisplayed(),
+                "Delete Beer button should be visible");
 
         // Check if "Back to Beer List" link is present
-        assertTrue(webDriver.findElement(By.id("backToListButton")).isDisplayed(), "Back to Beer List button should be visible");
+        assertTrue(webDriver.findElement(By.id("backToListButton")).isDisplayed(),
+                "Back to Beer List button should be visible");
     }
 
     @Test
@@ -241,9 +266,8 @@ class BeerUiTest {
         WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(30));
 
         // First, wait for the presence of the element
-        WebElement editButton = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.cssSelector("a[id^='editBeer-']")
-        ));
+        WebElement editButton = wait
+            .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("a[id^='editBeer-']")));
         // Now wait for it to be clickable
         editButton = wait.until(ExpectedConditions.elementToBeClickable(editButton));
 
@@ -264,10 +288,12 @@ class BeerUiTest {
         beerNameInput.sendKeys(newBeerName);
 
         // Submit the form
-        WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
+        WebElement submitButton = wait
+            .until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
         try {
             submitButton.click();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             JavascriptExecutor executor = (JavascriptExecutor) webDriver;
             executor.executeScript("arguments[0].click();", submitButton);
         }
@@ -275,7 +301,8 @@ class BeerUiTest {
         // Wait for the beer list page to reload
         wait.until(ExpectedConditions.urlToBe("http://localhost:" + port + LIST_BEERS_PAGE));
 
-        List<WebElement> beerRows = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
+        List<WebElement> beerRows = wait
+            .until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("#beerTable tbody tr")));
         log.info("Logging all beer names and IDs:");
         HashMap<String, String> beerMap = new HashMap<>();
         for (WebElement row : beerRows) {
@@ -332,14 +359,15 @@ class BeerUiTest {
 
         // Validieren Sie die Formulardaten direkt vor dem Absenden
         String formData = (String) ((JavascriptExecutor) webDriver).executeScript(
-            "return Array.from(document.querySelector('form').elements).map(e => e.name + '=' + e.value).join('&');"
-        );
+                "return Array.from(document.querySelector('form').elements).map(e => e.name + '=' + e.value).join('&');");
         log.info("Form data before submission: {}", formData);
         // Submit the form
-        WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
+        WebElement submitButton = wait
+            .until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
         try {
             submitButton.click();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             JavascriptExecutor executor = (JavascriptExecutor) webDriver;
             executor.executeScript("arguments[0].click();", submitButton);
         }
@@ -352,10 +380,12 @@ class BeerUiTest {
         int finalTotalItems = Integer.parseInt(totalItemsElement.getText());
         log.info("Final total items: {}", finalTotalItems);
 
-        assertEquals(initialTotalItems + 1, finalTotalItems, "Total number of beers should increase by 1 after creation");
+        assertEquals(initialTotalItems + 1, finalTotalItems,
+                "Total number of beers should increase by 1 after creation");
 
         // Navigate to the next page
-        WebElement nextPageButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(@class, 'page-link') and text()='Next']")));
+        WebElement nextPageButton = wait.until(ExpectedConditions
+            .elementToBeClickable(By.xpath("//a[contains(@class, 'page-link') and text()='Next']")));
         actions.moveToElement(nextPageButton).click().perform();
         waitForPageLoad();
 
@@ -368,8 +398,7 @@ class BeerUiTest {
             String beerId = beerNameElement.getAttribute("id").replace("beerName-", "");
             log.info("{}. Beer ID: {}, Name: {}", i + 1, beerId, beerName);
         }
-        boolean newBeerExists = beerNames.stream()
-            .anyMatch(element -> element.getText().equals(newBeerName));
+        boolean newBeerExists = beerNames.stream().anyMatch(element -> element.getText().equals(newBeerName));
         assertTrue(newBeerExists, "Newly created beer should be present in the list. newBeerName: " + newBeerName);
     }
 
@@ -389,9 +418,8 @@ class BeerUiTest {
         log.info("Initial total items: {}", initialTotalItems);
 
         // Find the delete button for the first beer
-        WebElement deleteButton = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("button[id^='deleteBeer-']")
-        ));
+        WebElement deleteButton = wait
+            .until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[id^='deleteBeer-']")));
         String deleteButtonId = deleteButton.getAttribute("id");
         String beerId = StringUtils.substringAfter(deleteButtonId, "deleteBeer-");
 
@@ -415,19 +443,19 @@ class BeerUiTest {
         int finalTotalItems = Integer.parseInt(totalItemsElement.getText());
         log.info("Final total items: {}", finalTotalItems);
 
-        assertEquals(initialTotalItems - 1, finalTotalItems, "Total number of beers should decrease by 1 after deletion");
+        assertEquals(initialTotalItems - 1, finalTotalItems,
+                "Total number of beers should decrease by 1 after deletion");
 
         // Verify that the deleted beer is no longer in the list
         List<WebElement> remainingBeerNames = webDriver.findElements(By.cssSelector("td[id^='beerName-']"));
-        boolean beerStillExists = remainingBeerNames.stream()
-            .anyMatch(element -> element.getText().equals(beerName));
+        boolean beerStillExists = remainingBeerNames.stream().anyMatch(element -> element.getText().equals(beerName));
         assertFalse(beerStillExists, "Deleted beer should not be present in the list");
     }
 
     private void waitForPageLoad() {
         WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(30));
-        wait.until((ExpectedCondition<Boolean>) wd ->
-            Objects.equals(((JavascriptExecutor) wd).executeScript("return document.readyState"), "complete"));
+        wait.until((ExpectedCondition<Boolean>) wd -> Objects
+            .equals(((JavascriptExecutor) wd).executeScript("return document.readyState"), "complete"));
     }
 
 }

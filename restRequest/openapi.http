@@ -1,3 +1,6 @@
 ### openapi
+< scripts/traceparent.js
 GET http://localhost:{{application-port}}/v3/api-docs
 Accept: application/json
+traceparent: 00-{{traceId}}-{{spanId}}-03
+baggage: testBaggage=sdjpa-spring-data-rest
