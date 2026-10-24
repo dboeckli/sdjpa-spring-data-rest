@@ -53,7 +53,7 @@
     <helm.executable>helm</helm.executable>
 
     <!-- https://springdoc.org/#what-is-the-compatibility-matrix-of-springdoc-openapi-with-spring-boot -->
-    <springdoc.openapi.version>3.1.1</springdoc.openapi.version>
+    <springdoc.openapi.version>3.2.0</springdoc.openapi.version>
 
     <logstash-logback.version>9.0</logstash-logback.version>
     <spring-javaformat-maven-plugin.version>0.0.48</spring-javaformat-maven-plugin.version>
