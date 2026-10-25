@@ -58,8 +58,9 @@ is needed here. On a normal host (Windows/CI) this does not apply either.
   (`spring.data.rest.base-path: /api/v9` in the profile YAMLs); `domain/` JPA entities
   (`Beer`, `Customer`); `ui/` MVC controller for the web UI; `bootstrap/BeerLoader` seeds data.
 - Schema migrations: `src/main/resources/db/migration` (Flyway only).
-- `log/` (`LogMessage`, `ConfigChangeListener`) + `config/RequestLoggingConfig` (next to
-  `config/OpenApiConfiguration`) for contextual logging/request tracing.
+- `config/RequestLoggingConfig`/`RequestLoggingFilter` (next to `config/OpenApiConfiguration`)
+  for request logging (segment-exact `appconfig.request-logging.exclude-paths`, switchable via
+  `appconfig.request-logging.enabled`).
 
 ## Deploy / CI
 
